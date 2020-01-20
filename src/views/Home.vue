@@ -1,18 +1,31 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="home">    
+    <DetailComic :visible="showDetailComic" @closeDetail="showDetailComic=false" :selected-comic="selectedComic" />
+    <ListComics @setSelectedComic="setSelectedComic" @openDetail="showDetailComic=true"/>    
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+
+import ListComics from '@/components/ListComics.vue'
+import DetailComic from '@/components/DetailComic.vue'
 
 export default {
   name: 'home',
+  data: function () {
+    return {
+      showDetailComic: false,
+      selectedComic: {}
+    }
+  },
   components: {
-    HelloWorld
+    ListComics,
+    DetailComic
+  },
+  methods: {
+    setSelectedComic(comic) {
+      this.selectedComic = comic
+    }
   }
 }
 </script>
