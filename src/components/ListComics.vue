@@ -1,59 +1,61 @@
 <template>
-  <div>
-    <p></p>
-    <div class="loading" v-show="loading">
-      <span class="fa fa-spinner fa-spin"></span> Loading
+  <div>     
+    <div v-if="loading" class="text-center">     
+      <v-progress-circular :size="100" color="purple" indeterminate>
+        <v-progress-circular :width="3" color="purple" indeterminate></v-progress-circular>          
+      </v-progress-circular>      
     </div>
-
-    <v-layout>
-      <v-flex>
-        <v-card>
-          <v-container fluid grid-list-md>
-            <v-layout row wrap>
-              <v-flex xs12 md4 lg2 v-for="comic in comics" :key="comic.id">
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-card class="ma-2">
-                      <v-img
-                        :contain="true"
-                        :src="comic.cover"
-                        :alt="comic.title"
-                        @click.stop="setSelectedComic(comic); show=true"
-                        class="white--text align-end"
-                        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                      ></v-img>
-                      <v-card-actions>
-                        <v-card-title
-                          class="pa-md-2 d-inline-block font-weight-regular body-2 text-truncate col-18"
-                          v-on="on"
-                          v-text="comic.title"
-                          @click.stop="showDetailComic = true"
-                        ></v-card-title>
-                        <v-spacer></v-spacer>
-                        <v-btn icon :color="comic.colorFav">
-                          <v-icon>mdi-heart</v-icon>
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </template>
-                  <span>{{ comic.title }}</span>
-                </v-tooltip>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <div class="text-xs-center">
-      <v-pagination
-        class="mt-8 mb-8"
-        v-model="pagination.page"
-        :length="pagination.totalPages"
-        total-visible="10"
-        @input="getComics"
-        color="purple"
-        circle
-      ></v-pagination>
+    <div v-if="!loading">
+      <v-layout>
+        <v-flex>
+          <v-card>
+            <v-container fluid grid-list-md>
+              <v-layout row wrap>
+                <v-flex xs12 md4 lg2 v-for="comic in comics" :key="comic.id">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-card class="ma-2">
+                        <v-img
+                          :contain="true"
+                          :src="comic.cover"
+                          :alt="comic.title"
+                          @click.stop="setSelectedComic(comic); show=true"
+                          class="white--text align-end"
+                          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                        ></v-img>
+                        <v-card-actions>
+                          <v-card-title
+                            class="pa-md-2 d-inline-block font-weight-regular body-2 text-truncate col-18"
+                            v-on="on"
+                            v-text="comic.title"
+                            @click.stop="showDetailComic = true"
+                          ></v-card-title>
+                          <v-spacer></v-spacer>
+                          <v-btn icon :color="comic.colorFav">
+                            <v-icon>mdi-heart</v-icon>
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                    <span>{{ comic.title }}</span>
+                  </v-tooltip>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+      </v-layout>
+      <div class="text-xs-center">
+        <v-pagination
+          class="mt-8 mb-8"
+          v-model="pagination.page"
+          :length="pagination.totalPages"
+          total-visible="10"
+          @input="getComics"
+          color="purple"
+          circle
+        ></v-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -81,8 +83,7 @@ export default {
     async getComics() {
       this.loading = true;
       const { data } = await ListComicsService.get(
-        this.pagination.page,
-        this.order
+        this.pagination.page  
       );
 
       let listComics = data.data.results;

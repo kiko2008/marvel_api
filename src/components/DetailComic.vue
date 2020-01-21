@@ -15,7 +15,7 @@
           <v-row>
             <v-col>
               <v-img aspect-ratio="1.4"
-                :src="this.selectedComic.cover" >
+                :src="this.selectedComic.cover" :contain="true">
               </v-img>
             </v-col>
             <v-col>
@@ -60,10 +60,10 @@ export default {
   },
   methods: {
     setComicfav() {      
-      const isLiked = localStorage.getItem(`comic-fav-${this.selectedComic.id}`)
+      const isLiked = localStorage.getItem(`comic-fav-${this.selectedComic.id}`) == null ? 'false' : localStorage.getItem(`comic-fav-${this.selectedComic.id}`)
       let likeValue = isLiked === 'true' ? 'false' : 'true'
       localStorage.setItem(`comic-fav-${this.selectedComic.id}`, likeValue);  
-      this.selectedComic.colorFav = isLiked === 'true' ? 'purple' : 'white'
+      this.selectedComic.colorFav = likeValue === 'true' ? 'purple' : 'white'
     }
   }
 }
