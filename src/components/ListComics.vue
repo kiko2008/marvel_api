@@ -1,96 +1,122 @@
 <template>
-  <div>      
+  <div>
     <p></p>
     <div class="loading" v-show="loading">
       <span class="fa fa-spinner fa-spin"></span> Loading
     </div>
 
-    <v-container fluid>
-      <v-row dense>
-        <v-col v-for="comic in comics" :key="comic.id" :cols="2">
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-card class="ma-6">            
-                <v-img :contain="true"
-                  :src="getThumbnail(comic)" 
-                  :alt="comic.title"
-                  @click.stop="setSelectedComic(comic); show=true" 
-                  class="white--text align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" >
-                </v-img>               
-                <v-card-actions>
-                  <v-card-title class="pa-md-2 d-inline-block font-weight-regular body-2 text-truncate col-18" 
-                    v-on="on" v-text="comic.title" 
-                    @click.stop="showDetailComic = true">
-                  </v-card-title>
-                  <v-spacer></v-spacer>
-                  
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </template>
-            <span>{{ comic.title }}</span>
-          </v-tooltip>
-        </v-col>
-      </v-row>
+    <v-layout>
+      <v-flex>
+        <v-card>
+          <v-container fluid grid-list-md>
+            <v-layout row wrap>
+              <v-flex xs12 md4 lg2 v-for="comic in comics" :key="comic.id">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-card class="ma-2">
+                      <v-img
+                        :contain="true"
+                        :src="comic.cover"
+                        :alt="comic.title"
+                        @click.stop="setSelectedComic(comic); show=true"
+                        class="white--text align-end"
+                        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                      ></v-img>
+                      <v-card-actions>
+                        <v-card-title
+                          class="pa-md-2 d-inline-block font-weight-regular body-2 text-truncate col-18"
+                          v-on="on"
+                          v-text="comic.title"
+                          @click.stop="showDetailComic = true"
+                        ></v-card-title>
+                        <v-spacer></v-spacer>
+                        <v-btn icon :color="comic.colorFav">
+                          <v-icon>mdi-heart</v-icon>
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                  <span>{{ comic.title }}</span>
+                </v-tooltip>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <div class="text-xs-center">
       <v-pagination
+        class="mt-8 mb-8"
         v-model="pagination.page"
         :length="pagination.totalPages"
         total-visible="10"
         @input="getComics"
         color="purple"
-        circle ></v-pagination>
-    </v-container>
+        circle
+      ></v-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-
-import { ServiceFactory } from '../services/ServiceFactory'
-const ListComicsService = ServiceFactory.get('listComics')
+import { ServiceFactory } from "../services/ServiceFactory";
+const ListComicsService = ServiceFactory.get("listComics");
 
 export default {
-  name: 'ListComics',
-  data: function () {
+  name: "ListComics",
+  data: function() {
     return {
       pagination: {
         page: 1,
         totalPages: 0
       },
-      loading: false,      
+      loading: false,
       comics: []
-    }
+    };
   },
   created() {
-    this.getComics()
-  },  
+    this.getComics();
+  },
   methods: {
-    async getComics() {      
-      this.loading = true
-      const { data } = await ListComicsService.get(this.pagination.page)      
-      this.comics = data.data.results
-      this.pagination.totalPages = Math.round(data.data.total/30)
-      this.loading = false
+    async getComics() {
+      this.loading = true;
+      const { data } = await ListComicsService.get(
+        this.pagination.page,
+        this.order
+      );
+
+      let listComics = data.data.results;
+      let comics = [];
+      listComics.forEach(element => {
+        comics.push({
+          id: element.id,
+          title: element.title,
+          description: element.description,
+          cover: `${element.thumbnail.path}/standard_fantastic.${
+            element.thumbnail.extension
+          }`,
+          price: `${element.prices[0].price}$`,
+          colorFav: localStorage.getItem(`comic-fav-${element.id}`) ? 'purple' : 'white'
+        });
+      });
+      this.comics = comics;
+      this.pagination.totalPages = Math.round(data.data.total / 30);
+      this.loading = false;
     },
     setSelectedComic(comic) {
       if (comic) {
-         this.$emit('setSelectedComic', comic)
-      }      
-    },
-    getThumbnail(comic) {
-      return `${comic.thumbnail.path}/standard_fantastic.${comic.thumbnail.extension}`
+        this.$emit("setSelectedComic", comic);
+      }
     }
   },
   computed: {
     show: {
-      get () {
-        return this.visible
+      get() {
+        return this.visible;
       },
-      set (value) {
+      set(value) {
         if (value) {
-          this.$emit('openDetail')
+          this.$emit("openDetail");
         }
       }
     }

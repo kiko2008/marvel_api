@@ -6,35 +6,36 @@
         <v-container>
           <v-row>
             <v-col class="font-weight-regular title">
-              {{ this.getComicData.title}}
-            </v-col>
+              {{ this.selectedComic.title}}
+              <v-btn icon :color="this.selectedComic.colorFav" @click="setComicfav">
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+            </v-col>            
           </v-row>  
           <v-row>
             <v-col>
               <v-img aspect-ratio="1.4"
-                :src="this.getComicData.cover" >
+                :src="this.selectedComic.cover" >
               </v-img>
             </v-col>
             <v-col>
               <v-row class="font-weight-light body-2 justify-center">
                 <v-col>  
-                  {{ this.getComicData.description}}
+                  {{ this.selectedComic.description}}
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>  
-                  {{ this.getComicData.price}}
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="show=false">Disagree</v-btn>
-              <v-btn color="green darken-1" text @click="show=false">Agree</v-btn>
-            </v-card-actions>
-          </v-row>
+                <v-col align="left" justify="left">  
+                  {{ this.selectedComic.price}}
+                </v-col>           
+                <v-col align="right" justify="right">                                                
+                    <v-btn color="purple" rounded dark small absolute bottom right @click="show=false">
+                        Volver
+                    </v-btn>  
+                </v-col> 
+              </v-row>              
+            </v-col>            
+          </v-row>                      
         </v-container>
       </v-card>
     </v-dialog>
@@ -55,18 +56,14 @@ export default {
           this.$emit('closeDetail')
         }
       }
-    },
-    getComicData () {
-      let comicData = {}
-      if (Object.entries(this.selectedComic).length != 0) {
-        comicData = {
-          "title": this.selectedComic.title,
-          "description": this.selectedComic.description,
-          "cover": `${this.selectedComic.thumbnail.path}.${this.selectedComic.thumbnail.extension}`,
-          "price": `${this.selectedComic.prices[0].price}$`
-        }      
-      }
-      return comicData
+    }    
+  },
+  methods: {
+    setComicfav() {      
+      const isLiked = localStorage.getItem(`comic-fav-${this.selectedComic.id}`)
+      let likeValue = isLiked === 'true' ? 'false' : 'true'
+      localStorage.setItem(`comic-fav-${this.selectedComic.id}`, likeValue);  
+      this.selectedComic.colorFav = isLiked === 'true' ? 'purple' : 'white'
     }
   }
 }

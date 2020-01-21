@@ -27,7 +27,7 @@
     <v-content>
       <router-view/>
     </v-content>
-    <v-footer absolute class="font-weight-medium">
+    <v-footer class="font-weight-medium">
       <v-col
         class="text-center"
         cols="12">

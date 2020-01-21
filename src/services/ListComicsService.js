@@ -6,8 +6,9 @@ const resource = `/comics?ts=1&apikey=${API_KEY}&hash=${HASH}`
 
 export default {
     get(page) {
-        let limit=30
-        let offset=page*limit
-        return ApiService.get(`${resource}&limit=${limit}&offset=${offset}`)
+        let limit= 30
+        let offset= page*limit
+        let order= 'title'
+        return ApiService.get(`${resource}&limit=${limit}&offset=${offset}&orderBy=${order}`)
     }
 }
