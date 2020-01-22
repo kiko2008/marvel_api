@@ -11,7 +11,7 @@ export default {
         let offset= (page-1)*limit        
         let query = `${RESOURCE}&limit=${limit}&offset=${offset}&orderBy=${ORDER}`
 
-        if(textSearch != null) {
+        if(textSearch != null && textSearch != "") {
             query = query.concat(`&titleStartsWith=${textSearch}`)
         }
         return ApiService.get(query)

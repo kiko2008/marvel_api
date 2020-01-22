@@ -10,37 +10,40 @@
         <v-flex>
           <v-card>
             <v-container fluid grid-list-md>
-              <v-layout row wrap>
-                <v-flex xs12 md4 lg2 v-for="comic in comicsShow" :key="comic.id">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-card class="ma-2">
-                        <v-img
-                          :contain="true"
-                          :src="comic.cover"
-                          :alt="comic.title"
-                          @click.stop="setSelectedComic(comic); show=true"
-                          class="white--text align-end clickable"
-                          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                        ></v-img>
-                        <v-card-actions>
-                          <v-card-title
-                            class="pa-md-2 d-inline-block font-weight-regular body-2 text-truncate col-18"
-                            v-on="on"
-                            v-text="comic.title"
+              <div v-if="comicsShow.length > 0">
+                <v-layout row wrap>               
+                  <v-flex xs12 md4 lg2 v-for="comic in comicsShow" :key="comic.id">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-card class="ma-2">
+                          <v-img
+                            :contain="true"
+                            :src="comic.cover"
+                            :alt="comic.title"
                             @click.stop="setSelectedComic(comic); show=true"
-                          ></v-card-title>
-                          <v-spacer></v-spacer>
-                          <v-btn icon :color="comic.colorFav">
-                            <v-icon>mdi-heart</v-icon>
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </template>
-                    <span>{{ comic.title }}</span>
-                  </v-tooltip>
-                </v-flex>
-              </v-layout>
+                            class="white--text align-end clickable"
+                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                          ></v-img>
+                          <v-card-actions>
+                            <v-card-title
+                              class="pa-md-2 d-inline-block font-weight-regular body-2 text-truncate col-18"
+                              v-on="on"
+                              v-text="comic.title"
+                              @click.stop="setSelectedComic(comic); show=true"
+                            ></v-card-title>
+                            <v-spacer></v-spacer>
+                            <v-icon :color="comic.colorFav">mdi-heart</v-icon>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                      <span>{{ comic.title }}</span>
+                    </v-tooltip>
+                  </v-flex>
+                </v-layout>
+              </div>  
+              <div class="text-center" v-else >
+                No hay comics que coincidan con el filtro
+              </div>             
             </v-container>
           </v-card>
         </v-flex>
@@ -85,8 +88,8 @@ export default {
     this.getComics()
   },  
   watch: {
-    filterSearch (titleSearch) {
-      titleSearch && this.getComics()
+    filterSearch () {
+      this.getComics()
     },
     filterFav () {
       this.filterOnlyFavs()
@@ -109,7 +112,7 @@ export default {
             element.thumbnail.extension
           }`,
           price: element.prices[0].price == null? '0$': `${element.prices[0].price}$`,
-          colorFav: localStorage.getItem(`comic-fav-${element.id}`) ? 'purple' : 'white'
+          colorFav: localStorage.getItem(`comic-fav-${element.id}`) === "true" ? 'purple' : 'white'
         })
       })
       this.comics = comics      
@@ -128,7 +131,7 @@ export default {
         if (this.filterFav) {
           
           this.comics.forEach(element => {
-            if (Object.keys(localStorage).includes(`comic-fav-${element.id}`)){
+            if (localStorage.getItem(`comic-fav-${element.id}`)==="true"){
               comicsFav.push(element)
             }
           })   
