@@ -3,51 +3,41 @@
     <v-app-bar app dark>
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
+          alt="Marvel Logo"
           class="shrink mr-2"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          src="./assets/marvel.png"
           transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
+          width="40%"
         />
       </div>
 
-      <v-spacer></v-spacer>      
+      <v-spacer></v-spacer>
     </v-app-bar>
 
     <v-content>
       <router-view/>
     </v-content>
     <v-footer class="font-weight-medium">
-      <v-col
-        class="text-center"
-        cols="12">
-        {{ new Date().getFullYear() }} — <strong>Marvel buscador comics</strong>
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }} —
+        <strong>Marvel buscador comics</strong>
       </v-col>
     </v-footer>
   </v-app>
 </template>
+<style>
+@import "./assets/styles/styles.css";
+</style>
 
 <script>
-
 export default {
-  name: 'App',
+  name: "App",
 
-  components: {
-    
-  },
+  components: {},
 
   data: () => ({
     //
-  }),
+  })
 };
 </script>

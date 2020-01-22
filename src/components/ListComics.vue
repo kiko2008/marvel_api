@@ -20,7 +20,7 @@
                           :src="comic.cover"
                           :alt="comic.title"
                           @click.stop="setSelectedComic(comic); show=true"
-                          class="white--text align-end"
+                          class="white--text align-end clickable"
                           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                         ></v-img>
                         <v-card-actions>
@@ -92,11 +92,11 @@ export default {
         comics.push({
           id: element.id,
           title: element.title,
-          description: element.description,
+          description: element.description === null? 'Sin descripcion': element.description,
           cover: `${element.thumbnail.path}/standard_fantastic.${
             element.thumbnail.extension
           }`,
-          price: `${element.prices[0].price}$`,
+          price: element.prices[0].price == null? '0$': `${element.prices[0].price}$`,
           colorFav: localStorage.getItem(`comic-fav-${element.id}`) ? 'purple' : 'white'
         });
       });
