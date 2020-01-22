@@ -1,6 +1,7 @@
 <template>
     <v-card class="mx-auto mt-4 mb-4" max-width="700">
       <v-toolbar dark >        
+        <v-btn small @click="search" color="purple" class="ml-2">Buscar</v-btn>
         <v-autocomplete
           color="purple"
           v-model="titleSelected"
@@ -13,7 +14,6 @@
           hide-details      
           solo-inverted></v-autocomplete>
         <v-switch v-model="onlyFav" label="Solo favoritos" color="purple" class="mt-5"></v-switch>        
-        <v-btn small @click="search" color="purple" class="ml-2">Aplicar filtros</v-btn>
       </v-toolbar>
       
     </v-card>  
