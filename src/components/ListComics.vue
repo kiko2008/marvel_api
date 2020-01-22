@@ -11,7 +11,7 @@
           <v-card>
             <v-container fluid grid-list-md>
               <v-layout row wrap>
-                <v-flex xs12 md4 lg2 v-for="comic in comics" :key="comic.id">
+                <v-flex xs12 md4 lg2 v-for="comic in comicsShow" :key="comic.id">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-card class="ma-2">
@@ -67,7 +67,8 @@ const ListComicsService = ServiceFactory.get("listComics")
 export default {
   name: "ListComics",
   props: {
-    filtersSearch: Object
+    filterSearch: String,
+    filterFav: Boolean
   },  
   data: function() {
     return {
@@ -76,16 +77,20 @@ export default {
         totalPages: 0
       },      
       loading: false,
-      comics: []
+      comics: [],
+      comicsShow: []
     }
   },
   created() {
     this.getComics()
   },  
   watch: {
-    filtersSearch (text) {
-      text && this.getComics()
+    filtersSearch (titleSearch) {
+      titleSearch && this.getComics()
     },
+    filterFav (showOnlyFavs) {
+      showOnlyFavs && this.filterOnlyFavs()
+    }
   },
   methods: {
     async getComics() {
@@ -107,12 +112,8 @@ export default {
           colorFav: localStorage.getItem(`comic-fav-${element.id}`) ? 'purple' : 'white'
         })
       })
-      this.comics = comics
-      if (this.filtersSearch != null) {        
-        if (this.filtersSearch.onlyFav) {
-          this.comics = this.filterFavComics
-        }
-      }
+      this.comics = comics      
+      this.comicsShow = comics 
       this.pagination.totalPages = Math.round(data.data.total / 30)
       this.loading = false
     },
@@ -120,18 +121,25 @@ export default {
       if (comic) {
         this.$emit("setSelectedComic", comic)
       }
-    }
-  },
-  computed: {        
-    filterFavComics: function() {      
-      let comicsFav = []
-      this.comics.forEach(element => {
-        if (Object.keys(localStorage).includes(`comic-fav-${element.id}`)){
-          comicsFav.push(element)
-        }
-      })          
-      return comicsFav
     },
+    filterOnlyFavs() {
+      let comicsFav = []
+      if (this.filterFav != null) {                
+        if (this.filterFav) {
+          
+          this.comics.forEach(element => {
+            if (Object.keys(localStorage).includes(`comic-fav-${element.id}`)){
+              comicsFav.push(element)
+            }
+          })   
+          this.comicsShow = comicsFav
+        } else{
+          this.comicsShow = this.comics
+        }  
+      }
+    },
+  },
+  computed: {    
     show: {
       get() {
         return this.visible

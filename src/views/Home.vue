@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <DetailComic :visible="showDetailComic" @closeDetail="showDetailComic=false" :selected-comic="selectedComic" />
-    <SearchComics @applyFilters="applyFilters" />    
-    <ListComics @setSelectedComic="setSelectedComic" @openDetail="showDetailComic=true" :filters-search="filtersSearch"/>    
+    <SearchComics @search="search" @showOnlyFav="showOnlyFav" />
+    <ListComics @setSelectedComic="setSelectedComic" @openDetail="showDetailComic=true" :filters-search="filterSearch" :filters-fav="filterFav" />
   </div>
 </template>
 
@@ -18,7 +18,8 @@ export default {
     return {
       showDetailComic: false,
       selectedComic: {},
-      filtersSearch: null
+      filterSearch: null,
+      filterFav: null
     }
   },
   components: {
@@ -30,8 +31,11 @@ export default {
     setSelectedComic(comic) {
       this.selectedComic = comic
     },
-    applyFilters(filters) {
-      this.filtersSearch = filters
+    search(filterSearch) {
+      this.filterSearch = filterSearch
+    },
+    showOnlyFav(filterFav) {
+      this.filterFav = filterFav
     }
   }
 }

@@ -12,8 +12,8 @@
           hide-no-data
           hide-details      
           solo-inverted></v-autocomplete>
-        <v-switch v-model="onlyFav" label="Solo favoritos" color="purple" class="mt-5"></v-switch>        
-        <v-btn small @click="applyFilters" color="purple" class="ml-2">Aplicar filtros</v-btn>
+        <v-switch v-model="onlyFav" @click="showOnlyFav" label="Solo favoritos" color="purple" class="mt-5"></v-switch>        
+        <v-btn small @click="search" color="purple" class="ml-2">Aplicar filtros</v-btn>
       </v-toolbar>
       
     </v-card>  
@@ -58,13 +58,12 @@ export default {
       this.comics = comics
       this.loading = false
     },
-    applyFilters() {
-      let filters= {
-        "textSearch": this.textSearch,
-        "onlyFav": this.onlyFav
-      }
-      this.$emit("applyFilters", filters)
-    }
+    search() {      
+      this.$emit("search", this.textSearch)
+    },
+    showOnlyFav() {      
+      this.$emit("showOnlyFav", this.onlyFav)
+    },
   }
 }
 
