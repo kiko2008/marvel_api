@@ -85,7 +85,7 @@ export default {
     this.getComics()
   },  
   watch: {
-    filtersSearch (titleSearch) {
+    filterSearch (titleSearch) {
       titleSearch && this.getComics()
     },
     filterFav () {
@@ -96,7 +96,7 @@ export default {
     async getComics() {
       this.loading = true
       const { data } = await ListComicsService.get(
-        this.pagination.page, this.filtersSearch  
+        this.pagination.page, this.filterSearch  
       )
       let listComics = data.data.results
       let comics = []

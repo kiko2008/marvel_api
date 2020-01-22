@@ -6,16 +6,14 @@ const RESOURCE = `/comics?ts=1&apikey=${API_KEY}&hash=${HASH}`
 const ORDER = 'title'
 
 export default {
-    get(page, filters) {
+    get(page, textSearch) {
         let limit= 30
         let offset= (page-1)*limit        
         let query = `${RESOURCE}&limit=${limit}&offset=${offset}&orderBy=${ORDER}`
 
-        if(filters != null) {            
-            if (filters.textSearch) {
-                query = query.concat(`&titleStartsWith=${filters.textSearch}`)
-            }
-        }        
+        if(textSearch != null) {
+            query = query.concat(`&titleStartsWith=${textSearch}`)
+        }
         return ApiService.get(query)
     },
     getTitleAutocomplete(searchText) {
