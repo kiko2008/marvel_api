@@ -1,7 +1,6 @@
 <template>
     <v-card class="mx-auto mt-4 mb-4" max-width="700">
-      <v-toolbar dark >
-        <v-toolbar-title>Buscar</v-toolbar-title>
+      <v-toolbar dark >        
         <v-autocomplete
           color="purple"
           v-model="titleSelected"
@@ -9,19 +8,21 @@
           :items="comics"
           :search-input.sync="textSearch"
           cache-items
-          class="mx-4"      
+          class="mx-2"      
           hide-no-data
           hide-details      
           solo-inverted></v-autocomplete>
         <v-switch v-model="onlyFav" label="Solo favoritos" color="purple" class="mt-5"></v-switch>        
+        <v-btn small @click="applyFilters" color="purple" class="ml-2">Aplicar filtros</v-btn>
       </v-toolbar>
+      
     </v-card>  
 </template>
 
 <script>
 
-import { ServiceFactory } from "../services/ServiceFactory";
-const ListComicsService = ServiceFactory.get("listComics");
+import { ServiceFactory } from "../services/ServiceFactory"
+const ListComicsService = ServiceFactory.get("listComics")
 
 export default {
   name: "SearchComics",
@@ -32,30 +33,37 @@ export default {
       onlyFav: false,    
       comics: [],
       loading: false
-    };
+    }
   },
   created() {
     this.getComics('')
   },
   watch: {
     textSearch (text) {
-      text && text && text !== this.select && this.getComics(text)
+      text && text !== this.select && this.getComics(text)
     },
   },
   methods: {
     async getComics(textSearch) {
-      this.loading = true;
+      this.loading = true
       const { data } = await ListComicsService.getTitleAutocomplete(textSearch)
 
-      let listComics = data.data.results;
-      let comics = [];
+      let listComics = data.data.results
+      let comics = []
       listComics.forEach(element => {
         comics.push(
           element.title
-        );
-      });
-      this.comics = comics;     
-      this.loading = false;
+        )
+      })
+      this.comics = comics
+      this.loading = false
+    },
+    applyFilters() {
+      let filters= {
+        "textSearch": this.textSearch,
+        "onlyFav": this.onlyFav
+      }
+      this.$emit("applyFilters", filters)
     }
   }
 }

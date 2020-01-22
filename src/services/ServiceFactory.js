@@ -1,9 +1,7 @@
 import ListComicsService from "./ListComicsService"
-import DetailComicService from "./DetailComicService"
 
 const repositories = {
-    listComics: ListComicsService,
-    detailComic: DetailComicService
+    listComics: ListComicsService    
 }
 
 export const ServiceFactory = {

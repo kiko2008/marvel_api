@@ -28,7 +28,7 @@
                             class="pa-md-2 d-inline-block font-weight-regular body-2 text-truncate col-18"
                             v-on="on"
                             v-text="comic.title"
-                            @click.stop="showDetailComic = true"
+                            @click.stop="setSelectedComic(comic); show=true"
                           ></v-card-title>
                           <v-spacer></v-spacer>
                           <v-btn icon :color="comic.colorFav">
@@ -59,35 +59,42 @@
     </div>
   </div>
 </template>
-
 <script>
-import { ServiceFactory } from "../services/ServiceFactory";
-const ListComicsService = ServiceFactory.get("listComics");
+
+import { ServiceFactory } from "../services/ServiceFactory"
+const ListComicsService = ServiceFactory.get("listComics")
 
 export default {
   name: "ListComics",
+  props: {
+    filtersSearch: Object
+  },  
   data: function() {
     return {
       pagination: {
         page: 1,
         totalPages: 0
-      },
+      },      
       loading: false,
       comics: []
-    };
+    }
   },
   created() {
-    this.getComics();
+    this.getComics()
+  },  
+  watch: {
+    filtersSearch (text) {
+      text && this.getComics()
+    },
   },
   methods: {
     async getComics() {
-      this.loading = true;
+      this.loading = true
       const { data } = await ListComicsService.get(
-        this.pagination.page  
-      );
-
-      let listComics = data.data.results;
-      let comics = [];
+        this.pagination.page, this.filtersSearch  
+      )
+      let listComics = data.data.results
+      let comics = []
       listComics.forEach(element => {
         comics.push({
           id: element.id,
@@ -98,29 +105,43 @@ export default {
           }`,
           price: element.prices[0].price == null? '0$': `${element.prices[0].price}$`,
           colorFav: localStorage.getItem(`comic-fav-${element.id}`) ? 'purple' : 'white'
-        });
-      });
-      this.comics = comics;
-      this.pagination.totalPages = Math.round(data.data.total / 30);
-      this.loading = false;
+        })
+      })
+      this.comics = comics
+      if (this.filtersSearch != null) {        
+        if (this.filtersSearch.onlyFav) {
+          this.comics = this.filterFavComics
+        }
+      }
+      this.pagination.totalPages = Math.round(data.data.total / 30)
+      this.loading = false
     },
     setSelectedComic(comic) {
       if (comic) {
-        this.$emit("setSelectedComic", comic);
+        this.$emit("setSelectedComic", comic)
       }
     }
   },
-  computed: {
+  computed: {        
+    filterFavComics: function() {      
+      let comicsFav = []
+      this.comics.forEach(element => {
+        if (Object.keys(localStorage).includes(`comic-fav-${element.id}`)){
+          comicsFav.push(element)
+        }
+      })          
+      return comicsFav
+    },
     show: {
       get() {
-        return this.visible;
+        return this.visible
       },
       set(value) {
         if (value) {
-          this.$emit("openDetail");
+          this.$emit("openDetail")
         }
       }
-    }
+    }    
   }
-};
+}
 </script>

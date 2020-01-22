@@ -8,7 +8,7 @@
           contain
           src="./assets/marvel.png"
           transition="scale-transition"
-          width="40%"
+          width="35%"
         />
       </div>
 
@@ -26,8 +26,9 @@
     </v-footer>
   </v-app>
 </template>
+
 <style>
-@import "./assets/styles/styles.css";
+  @import "./assets/styles/styles.css"
 </style>
 
 <script>
@@ -39,5 +40,5 @@ export default {
   data: () => ({
     //
   })
-};
+}
 </script>

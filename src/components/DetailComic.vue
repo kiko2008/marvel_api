@@ -45,7 +45,10 @@
 <script>
 export default {
   name: 'DetailComic',
-  props: ['visible', 'selectedComic'],
+  props: {
+    visible: Boolean, 
+    selectedComic: Object
+  },  
   computed: {
     show: {
       get () {
@@ -62,7 +65,7 @@ export default {
     setComicfav() {      
       const isLiked = localStorage.getItem(`comic-fav-${this.selectedComic.id}`) == null ? 'false' : localStorage.getItem(`comic-fav-${this.selectedComic.id}`)
       let likeValue = isLiked === 'true' ? 'false' : 'true'
-      localStorage.setItem(`comic-fav-${this.selectedComic.id}`, likeValue);  
+      localStorage.setItem(`comic-fav-${this.selectedComic.id}`, likeValue)
       this.selectedComic.colorFav = likeValue === 'true' ? 'purple' : 'white'
     }
   }
