@@ -88,8 +88,8 @@ export default {
     filtersSearch (titleSearch) {
       titleSearch && this.getComics()
     },
-    filterFav (showOnlyFavs) {
-      showOnlyFavs && this.filterOnlyFavs()
+    filterFav () {
+      this.filterOnlyFavs()
     }
   },
   methods: {

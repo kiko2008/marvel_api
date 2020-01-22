@@ -2,7 +2,7 @@
   <div class="home">
     <DetailComic :visible="showDetailComic" @closeDetail="showDetailComic=false" :selected-comic="selectedComic" />
     <SearchComics @search="search" @showOnlyFav="showOnlyFav" />
-    <ListComics @setSelectedComic="setSelectedComic" @openDetail="showDetailComic=true" :filters-search="filterSearch" :filters-fav="filterFav" />
+    <ListComics @setSelectedComic="setSelectedComic" @openDetail="showDetailComic=true" :filter-search="filterSearch" :filter-fav="filterFav" />
   </div>
 </template>
 

@@ -12,7 +12,7 @@
           hide-no-data
           hide-details      
           solo-inverted></v-autocomplete>
-        <v-switch v-model="onlyFav" @click="showOnlyFav" label="Solo favoritos" color="purple" class="mt-5"></v-switch>        
+        <v-switch v-model="onlyFav" label="Solo favoritos" color="purple" class="mt-5"></v-switch>        
         <v-btn small @click="search" color="purple" class="ml-2">Aplicar filtros</v-btn>
       </v-toolbar>
       
@@ -42,6 +42,9 @@ export default {
     textSearch (text) {
       text && text !== this.select && this.getComics(text)
     },
+    onlyFav() {
+      this.showOnlyFav()
+    }
   },
   methods: {
     async getComics(textSearch) {
