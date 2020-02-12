@@ -33,7 +33,7 @@ Esto mostrara el listado de comics inicial.
 
 ### Url de prueba para la web
 
-Para probar la web sin tener que levantarla en local. Podemos acceder a http:\\fran.fullstack.com\search-comics
+Para probar la web sin tener que levantarla en local. Podemos acceder a www.marvel.franfernandezfullstack.es
 
 
 ## Version
